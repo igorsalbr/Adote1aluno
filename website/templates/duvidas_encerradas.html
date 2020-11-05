@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Dúvidas Encerradas {% endblock %}
+
+{% if user.groups.all.0.name == 'aluno' %}
+  {% block aluno %} active {% endblock %}
+{% else %}
+  {% block monitor %} active {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Dúvidas Encerradas</h1>
+  <p class="mb-4">
+    Veja suas dúvidas encerradas ou volte aqui: <a href="{% url 'duvidas' %}">Dúvidas</a>
+  </p>
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Encerradas</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          
+          <thead>
+            <tr>
+              <th>Topico</th>
+              <th>Texto</th>
+              <th>Link Arquivo</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                  <a href="{% url 'duvidas-detalhe' obj.pk %}">{{ obj.topico_duv | truncatechars:30 }}</a>
+                </td>
+                <td>
+                  {{ obj.texto | truncatechars:30 }}
+                </td>
+                <td>
+                  {% if obj.file_duv %}
+                    <a target="_blank" href="{{ obj.file_duv.url }}">Baixar</a>
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td>
+                  {{ obj.data_duv | date:"d/m/y" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

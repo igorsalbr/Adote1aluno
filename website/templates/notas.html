@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Notas {% endblock %}
+
+{% block monitor %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Notas</h1>
+  <p class="mb-4">
+    Veja as notas dos alunos:
+  </p>
+
+  {% if user.groups.all.0.name == 'aluno' %}
+    <p class="mb-4">
+      Você não tem permissão para ver as notas de todos os alunos
+    </p>
+  {% else %}
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          
+          <thead>
+            <tr>
+              <th class="font-weight-bold text-dark">Simulado</th>
+              <th class="font-weight-bold text-dark">Aluno</th>
+              <th class="font-weight-bold text-dark">Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                    {{ obj.id_simulado.evento.nome_ev | truncatechars:30 }}
+                </td>
+                <td>
+                    {{ obj.id_user.username | truncatechars:30 | capfirst }}
+                </td>
+                <td>
+                  <a href="{% url 'editarnotas' obj.pk %}">{{ obj.nota | floatformat }}</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="mt-4">
+    Quer atribuir notas a um simulado? Entre em <a href="{% url 'atribuirnotas' %}">Atribuir Notas</a>
+  </p>
+  {% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

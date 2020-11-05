@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Perfil {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+	<!-- Page Heading -->
+	<h1 class="h3 mb-4 text-gray-800">Perfil do Usuário</h1>
+
+	{% if request.user.id != user.id %}
+    <p class="mb-4">
+      Você não tem permissão para ver esse perfil
+    </p>
+	{% else %}
+
+		<form class="user" method="POST">
+		{% csrf_token %}
+
+
+		<div class="form-group">
+		  {{ form.first_name }}
+		</div>
+		<div class="form-group">
+
+		  {{ form.email }}
+
+		</div>
+
+		<p class="mt-4">
+	      Quer trocar sua senha? Entre em: <a href="{% url 'trocarsenha' %}">Trocar Senha</a>
+	    </p>
+
+
+		<button type="submit" class="btn btn-primary">Alterar Dados</button>
+		<a class="btn btn-danger" href="#" data-toggle="modal" data-target="#excluirModal" role="button ">Excluir Usuário</a>
+
+
+	<!-- Excluir Modal-->
+  <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="excluirModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="excluirModalTitulo">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte "Excluir" abaixo se estiver pronto para excluir essa dúvida.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="{% url 'excluirusuario' user.id %}" role="button">Excluir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+	{% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

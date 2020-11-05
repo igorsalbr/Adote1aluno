@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Simulado {% endblock %}
+
+
+{% block monitor %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Simulado</h1>
+  <p class="mb-4">
+    Veja os próximos simulados:
+  </p>
+
+  {% if user.groups.all.0.name == 'aluno' %}
+    <p class="mb-4">
+      Você não tem permissão para editar um simulado
+    </p>
+  {% else %}
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" >
+          
+          <thead>
+            <tr>
+              <th class="font-weight-bold text-dark">Data</th>
+              <th class="font-weight-bold text-dark">Simulado</th>
+              <th class="font-weight-bold text-dark">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sim in object_list %}
+              <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                      <h1 class="mb-0 mr-2 text-primary font-weight-normal">
+                        {{ sim.evento.data_ev | date:"d" }}
+                      </h1>
+                      <div>
+                        <p class="font-weight-bold mb-0 text-dark">
+                          {{ sim.evento.data_ev | date:"M" }}
+                        </p>
+                        <p class="mb-0">
+                          {{ sim.evento.data_ev | date:"Y" }}
+                        </p>
+                      </div>
+                    </div>
+                </td>
+                <td>
+                  <p class="font-weight-bold mb-0 text-dark">
+                    <a href="{% url 'simulado-editar' sim.pk %}">{{ sim.evento.nome_ev | truncatechars:30 }}</a>
+                  </p>
+                </td>
+                <td>
+                  {% if sim.status_sim == 'Pro'%}
+                      Em progresso
+                  {% else %}
+                      Encerrado
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="mt-4">
+    Quer atribuir notas a um simulado? Entre em <a href="{% url 'atribuirnotas' %}">Atribuir Notas</a>
+  </p>
+  {% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

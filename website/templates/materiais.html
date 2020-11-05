@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Materiais {% endblock %}
+
+{% if user.groups.all.0.name == 'aluno' %}
+  {% block aluno %} active {% endblock %}
+{% else %}
+  {% block monitor %} active {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Materiais</h1>
+  <p class="mb-4">
+    Veja os materiais disponibilizados pelos nossos monitores.
+    {% if user.groups.all.0.name != 'aluno' %}
+      Ou crie novos: <a href="{% url 'materiais-criar' %}">Novo Material</a>
+    {% endif %}
+  </p>
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          
+          <thead>
+            <tr>
+              <th>Matéria</th>
+              <th>Tópico</th>
+              <th>Descrição</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                  {{ obj.id_materia.nome_mat | truncatechars:30 | title }}
+                </td>
+                <td>
+                  <a href="{% url 'materiais-detalhe' obj.pk %}">{{ obj.topico_mas | truncatechars:30 | capfirst }}</a>
+                </td>
+                <td>
+                  {{ obj.descr_mas | truncatechars:30 | capfirst }}
+                </td>
+                <td>
+                  {{ obj.data_mas | date:"d/m/y" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

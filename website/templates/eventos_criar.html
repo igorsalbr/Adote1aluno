@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Criar Eventos {% endblock %}
+
+{% block administrador %} active {% endblock %}
+
+{% block extrajs %}
+<script>
+  $(document).ready(function() {
+      var $urlDiv = $('#url').closest('div').show();
+
+      $('#tipo').change(function() {         
+          var selectedValue = $(this).val();
+          
+          if(selectedValue  === 'Sim') {
+              $urlDiv.show();
+          } else {
+              $urlDiv.hide();
+          }
+      });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Novo evento</h1>
+  <p class="mb-4">
+    Crie uma evento nos campos seguintes 
+  </p>
+
+  {% if user.groups.all.0.name != 'monitor_administrador' %}
+    <p class="mb-4">
+      Você não tem permissão para criar um evento
+    </p>
+  {% else %}
+
+  <form method="POST" action="" >
+  	{% csrf_token %}
+
+  	<div class="form-group">
+      <label for="nome">Nome</label>
+    	{{ form.nome_ev }}
+
+	</div>
+	<div class="form-group">
+      <label for="descr">Descrição</label>
+      {{ form.descr_ev }}
+
+    </div>
+    <div class="form-group">
+      <label for="data">Data</label>
+      {{ form.data_ev }}
+
+    </div>
+    <div class="form-group">
+      <label for="tipo">Tipo de Evento</label>
+      {{ form.tipo_ev }}
+
+    </div>
+
+    {{ simulado.management_form }}
+      {% for sim in simulado %}
+        <div class="form-group">
+          <label for="url">Inserir Informações:</label>
+
+            {{ sim.url_sim }}
+        </div>
+        {{ sim.status_sim.as_hidden }}
+
+      {% endfor %}
+
+  	<button type="submit" class="btn btn-primary">Criar Evento</button>
+
+  </form>
+  {% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

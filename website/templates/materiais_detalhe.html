@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Detalhe Materiais {% endblock %}
+
+{% if user.groups.all.0.name == 'aluno' %}
+  {% block aluno %} active {% endblock %}
+{% else %}
+  {% block monitor %} active {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Materiais</h1>
+<p class="mb-4">
+    Veja os detalhes do material selecionado
+  </p>
+  
+  <!-- Dropdown Card Example -->
+  <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">
+      {{ materiais.topico_mas | title }} - {{ materiais.data_mas | date:"d/m/y" }}
+  	</h6>
+    {% if user.groups.all.0.name != 'aluno' %}
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+          <div class="dropdown-header">Ações:</div>
+          <a class="dropdown-item" href="{% url 'materiais-editar' materiais.pk %}">Editar</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#excluirModal">Excluir</a>
+        </div>
+      </div>
+    {% endif %}
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+      <p>
+        {{ materiais.id_materia.nome_mat | title }}
+      </p>
+      <p class="mb-3">
+        {{ materiais.descr_mas | capfirst }}
+      </p>
+      <p>
+        <b>Autor:</b> {{ materiais.id_user.first_name | capfirst }}
+      </p>
+      <p>
+        <b>Baixar arquivos:</b>
+      </p>
+      {% for obj in arquivos %}
+    	  <a target="_blank" href="{{ obj.file_mat.url }}" class="btn btn-link" role="button">{{ obj.nome_arq }}</a>
+          [{{ obj.file_mat.size | filesizeformat }}]
+      {% empty %}
+      <p>
+        Não há arquivos para esse material
+      </p>
+      {% endfor %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Excluir Modal-->
+  <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="excluirModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="excluirModalTitulo">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte "Excluir" abaixo se estiver pronto para excluir esse material.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="{% url 'materiais-excluir' materiais.pk %}" role="button">Excluir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

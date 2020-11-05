@@ -1,0 +1,278 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Adote um Aluno | {% block title %} Página {% endblock %}</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="{% static 'website/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{% static 'website/css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+  {% if request.path == '/duvidas' or request.path == '/materiais' or request.path == '/notas' %}
+    <!-- Custom styles for this page -->
+    <link href="{% static 'website/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+  {% endif %}
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-people-arrows"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Adote um aluno</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item {% block index %} {% endblock %}">
+        <a class="nav-link" href="{% url 'index' %}">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Home</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      {% if user.is_authenticated %}
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Interface do usuário
+        </div> 
+        {% if user.groups.all.0.name == 'aluno' %}
+          <!-- Nav Item - Aluno Collapse Menu -->
+          <li class="nav-item {% block aluno %} {% endblock %}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAluno" aria-expanded="true" aria-controls="collapseAluno">
+              <i class="fas fa-fw fa-user"></i>
+              <span>Aluno</span>
+            </a>
+            <div id="collapseAluno" class="collapse" aria-labelledby="headingAluno" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Ferramentas:</h6>
+                <a class="collapse-item" href="{% url 'simulado-alunos' %}">Acessar Simulados</a>
+                <a class="collapse-item" href="{% url 'materiais' %}">Baixar Materiais</a>
+                <a class="collapse-item" href="{% url 'duvidas' %}">Enviar Dúvidas</a>
+              </div>
+            </div>
+          </li>
+        {% endif%}
+        {% if user.groups.all.0.name == 'monitor' or user.groups.all.0.name == 'monitor_administrador' %}
+          <!-- Nav Item - Monitor Collapse Menu -->
+          <li class="nav-item {% block monitor %} {% endblock %} ">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMonitor" aria-expanded="true" aria-controls="collapseMonitor">
+              <i class="fas fa-fw fa-user-cog"></i>
+              <span>Monitor</span> 
+            </a>
+            <div id="collapseMonitor" class="collapse" aria-labelledby="headingMonitor" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Ferramentas:</h6>
+                <a class="collapse-item" href="{% url 'materiais' %}">Adicionar Materiais</a>
+                <a class="collapse-item" href="{% url 'simulado' %}">Editar Simulados</a>
+                <a class="collapse-item" href="{% url 'duvidas' %}">Responder Dúvidas</a>
+                <a class="collapse-item" href="{% url 'notas' %}">Ver notas</a>
+              </div>
+            </div>
+          </li>
+        {% endif %}
+        {% if user.groups.all.0.name == 'monitor_administrador' %}
+        <!-- Nav Item - Administrador Collapse Menu -->
+        <li class="nav-item {% block administrador %} {% endblock %} ">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdministrador" aria-expanded="true" aria-controls="collapseAdministrador">
+            <i class="fas fa-fw fa-user-tie"></i>
+            <span>Administrador</span>
+          </a>
+          <div id="collapseAdministrador" class="collapse" aria-labelledby="headingAdministrador" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Ferramentas:</h6>
+              <a class="collapse-item" href="{% url 'atualizarpermissoes' %}">Atualizar Permissões</a>
+              <a class="collapse-item" href="{% url 'eventos-criar' %}">Criar Eventos</a>
+              <a class="collapse-item" href="{% url 'materia' %}">Editar Matéria</a>
+              <a class="collapse-item" href="{% url 'admin:index' %}">Painel do Administrador</a>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+      {% endif %}
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Público
+      </div>
+
+      <!-- Nav Item - Calendário -->
+      <li class="nav-item {% block calendario %} {% endblock %}">
+        <a class="nav-link" href="{% url 'calendario' %}">
+          <i class="fas fa-fw fa-calendar-alt"></i>
+          <span>Calendário</span></a>
+      </li>
+
+      <!-- Nav Item - Quem Somos -->
+      <li class="nav-item {% block quemsomos %} {% endblock %}">
+        <a class="nav-link" href="{% url 'quemsomos' %}">
+          <i class="fas fa-fw fa-users"></i>
+          <span>Quem Somos</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                  {% if user.is_authenticated %}
+                    {{ user.get_short_name | capfirst }}
+                  {% else %}
+                    Visitante
+                  {% endif %}
+                </span>
+                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                {% if user.is_authenticated %}
+                  <a class="dropdown-item" href="{% url 'perfil' user.id %}">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Perfil
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                  </a>
+                {% else %}
+                <a class="dropdown-item" href="{% url 'login' %}">
+                  <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Login
+                </a>
+                {% endif %}
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+{% block content %}
+
+{% endblock %}
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Adote um Aluno 2020</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte "Logout" abaixo se estiver pronto para finalizar sua sessão.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="{% url 'logout' %}" role="button" >Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'website/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'website/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{% static 'website/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{% static 'website/js/sb-admin-2.min.js' %}"></script>
+
+  {% if request.path == '/duvidas' or request.path == '/materiais' or request.path == '/notas' %}
+    <!-- Page level plugins -->
+    <script src="{% static 'website/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'website/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'website/js/demo/datatables-demo.js' %}"></script>
+  {% endif %}
+  {% block extrajs %}
+  {% endblock %}
+
+</body>
+
+</html>

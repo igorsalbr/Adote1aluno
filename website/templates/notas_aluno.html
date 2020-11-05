@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Notas Aluno {% endblock %}
+
+{% block aluno %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Notas</h1>
+  <p class="mb-4">
+    Veja as suas notas:
+  </p>
+
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          
+          <thead>
+            <tr>
+              <th class="font-weight-bold text-dark">Simulado</th>
+              <th class="font-weight-bold text-dark">Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                    {{ obj.id_simulado.evento.nome_ev | truncatechars:30 }}
+                </td>
+                <td>
+                  {{ obj.nota | floatformat }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Detalhe Dúvida {% endblock %}
+
+{% if user.groups.all.0.name == 'aluno' %}
+  {% block aluno %} active {% endblock %}
+{% else %}
+  {% block monitor %} active {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Dúvidas</h1>
+  <p class="mb-4">
+    Veja os detalhes da dúvida selecionada
+  </p>
+  
+  {% if user.groups.all.0.name == 'aluno' and user.id != duvida.id_user.id %}
+    <p class="mb-4">
+      Você não tem permissão para ver essa dúvida
+    </p>
+  {% else %}
+  <!-- Dropdown Card Example -->
+  <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">
+      {{ duvida.topico_duv | title }} - {{ duvida.data_duv | date:"d/m/y" }}
+  	</h6>
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+          <div class="dropdown-header">Ações:</div>
+          <a class="dropdown-item" href="{% url 'duvidas-editar' duvida.pk %}">Editar</a>
+          <a class="dropdown-item" href="{% url 'respostas-criar' duvida.pk %}">Responder</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#excluirModal">Excluir</a>
+        </div>
+      </div>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+      <p class="mb-2">
+        {{ duvida.texto | capfirst }}
+      </p>
+      <p>
+        <b>Autor:</b> {{ duvida.id_user.first_name | capfirst }}
+      </p>
+      {% if duvida.file_duv %}
+      <p>
+  	  	<a target="_blank" href="{{ duvida.file_duv.url }}"> Baixar arquivo </a>
+      </p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if respostas %}
+    <p class="mt-4 mb-4">
+      Veja as respostas para essa dúvida
+    </p>
+  {% endif %}
+
+
+  {% for res in respostas %}
+    <!-- Dropdown Card Example -->
+    <div class="card shadow mb-2">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">
+        {{ res.id_user.first_name | capfirst }} - {{ res.data_res | date:"d/m/y" }}
+        </h6>
+
+        {% if user.id == res.id_user.id %}
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Ações:</div>
+                <a class="dropdown-item" href="{% url 'respostas-editar' res.pk %}">Editar</a>
+              
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'respostas-excluir' res.pk %}">Excluir</a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <p class="mb-2">
+          {{ res.texto | capfirst }}
+        </p>
+        {% if res.file_res %}
+        <p>
+          <a target="_blank" href="{{ res.file_res.url }}">
+            Baixar arquivo
+          </a>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+
+  <!-- Excluir Modal-->
+  <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="excluirModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="excluirModalTitulo">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte "Excluir" abaixo se estiver pronto para excluir essa dúvida.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="{% url 'duvidas-excluir' duvida.pk %}" role="button">Excluir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if user.groups.all.0.name == 'aluno' %}
+    <p class="mt-4">
+      Achou a resposta suficiente? Encerre essa dúvida: <a href="{% url 'duvidas-editar' duvida.pk %}">Encerrar dúvida</a>
+    </p>
+  {% endif %}
+
+  {% endif %} 
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

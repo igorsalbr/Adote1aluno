@@ -1,0 +1,83 @@
+{% extends 'base_registration.html' %}
+{% load static %}
+
+{% block title %} Cadastro {% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+      <!-- Nested Row within Card Body -->
+      <div class="row">
+        <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+        <div class="col-lg-7">
+          <div class="p-5">
+            <div class="text-center">
+              <h1 class="h4 text-gray-900 mb-4">Crie sua conta!</h1>
+            </div>
+            {% if user.is_authenticated %}
+              <p class="mb-4">
+                Você já está logado
+              </p>
+            {% else %}
+              <form class="user" method="POST">
+                {% csrf_token %}
+
+
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+
+                    {{ form.username }}
+
+                  </div>
+                  <div class="col-sm-6">
+                    
+                    {{ form.first_name }}
+
+                  </div>
+                </div>
+                <div class="form-group">
+
+                  {{ form.email }}
+
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+
+                    {{ form.password1 }}
+
+                  </div>
+                  <div class="col-sm-6">
+
+                    {{ form.password2 }}
+
+                  </div>
+                  
+                </div>
+                <div class="form-group row ml-2 mr-2">
+                  <small id="passwordHelpBlock" class="form-text text-muted text-justify">
+                      Sua senha deve ter pelo menos 8 caracteres, e não pode ser apenas numérica, extremamente comum ou similar a suas informações pessoais.
+                  </small>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary btn-user btn-block">Cadastrar</button>
+
+              </form>
+              <div class="text-center">
+                <a class="small" href="{% url 'forgot-password' %}">Esqueceu sua senha?</a>
+              </div>
+              <div class="text-center">
+                <a class="small" href="{% url 'login' %}">Já tem uma conta? Login!</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

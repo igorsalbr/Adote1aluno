@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Dúvidas {% endblock %}
+
+{% if user.groups.all.0.name == 'aluno' %}
+  {% block aluno %} active {% endblock %}
+{% else %}
+  {% block monitor %} active {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Dúvidas</h1>
+  <p class="mb-4">
+    Veja suas dúvidas ou envie novas para nossos monitores aqui: <a href="{% url 'duvidas-criar' %}">Nova dúvida</a>
+  </p>
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Em aberto</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          
+          <thead>
+            <tr>
+              <th>Tópico</th>
+              <th>Descrição</th>
+              <th>Link Arquivo</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                  <a href="{% url 'duvidas-detalhe' obj.pk %}">{{ obj.topico_duv | truncatechars:30 }}</a>
+                </td>
+                <td>
+                  {{ obj.texto | truncatechars:30 }}
+                </td>
+                <td>
+                  {% if obj.file_duv %}
+                    <a target="_blank" href="{{ obj.file_duv.url }}">Baixar</a>
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td>
+                  {{ obj.data_duv | date:"d/m/y" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="mt-4">
+    Quer ver suas dúvidas já encerradas? Entre aqui: <a href="{% url 'duvidas-encerradas' %}">Dúvidas encerradas</a>
+  </p>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

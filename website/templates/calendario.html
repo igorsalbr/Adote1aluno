@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Calendário {% endblock %}
+
+{% block calendario %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Calendário</h1>
+  <p class="mb-4">
+    Veja os eventos que você, vestibulando, deve prestar atenção:
+  </p>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" >
+          
+          <thead>
+            <tr>
+              <th class="font-weight-bold text-dark">Data</th>
+              <th class="font-weight-bold text-dark">Evento</th>
+              <th class="font-weight-bold text-dark">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ev in eventos_cal %}
+              <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                      <h1 class="mb-0 mr-2 text-primary font-weight-normal">
+                        {{ ev.data_ev | date:"d" }}
+                      </h1>
+                      <div>
+                        <p class="font-weight-bold mb-0 text-dark">
+                          {{ ev.data_ev | date:"M" }}
+                        </p>
+                        <p class="mb-0">
+                          {{ ev.data_ev | date:"Y" }}
+                        </p>
+                      </div>
+                    </div>
+                </td>
+                <td>
+                  <p class="font-weight-bold mb-0 text-dark">
+                    <a href="{% url 'eventos-detalhe' ev.pk %}">{{ ev.nome_ev | truncatechars:30 }}</a>
+                  </p>
+                </td>
+                <td>
+                  {{ ev.descr_ev | truncatechars:100 }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% if user.groups.all.0.name == 'monitor_administrador' %}
+    <p class="mt-4">
+      Para adicionar novos eventos, entre aqui: <a href="{% url 'eventos-criar' %}">Novo evento</a>
+    </p>
+  {% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

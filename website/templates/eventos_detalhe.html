@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Detalhe Eventos {% endblock %}
+
+{% block calendario %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Eventos</h1>
+<p class="mb-4">
+    Veja os detalhes do evento selecionado
+  </p>
+  
+  
+  <!-- Dropdown Card Example -->
+  <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">
+      {{ eventos.nome_ev | title }} - {{ eventos.data_ev | date:"d/m/y" }}
+  	</h6>
+    {% if user.groups.all.0.name == 'monitor_administrador' %}
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+          <div class="dropdown-header">Ações:</div>
+          <a class="dropdown-item" href="{% url 'eventos-editar' eventos.pk %}">Editar</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#excluirModal">Excluir</a>
+        </div>
+      </div>
+    {% endif %}
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+      <p class="mb-2">
+        {{ eventos.descr_ev | capfirst }}
+      </p>
+      {% if simulado.status_sim == 'Pro' and user.is_authenticated %}
+        <p>
+          <b>Url:</b> <a target="_blank" href="{{ simulado.url_sim }}"> {{ simulado.url_sim }} </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+
+  <!-- Excluir Modal-->
+  <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="excluirModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="excluirModalTitulo">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte "Excluir" abaixo se estiver pronto para excluir essa evento.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="{% url 'eventos-excluir' eventos.pk %}" role="button">Excluir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

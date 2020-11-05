@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Criar Matéria {% endblock %}
+
+{% block administrador %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Nova matéria</h1>
+  <p class="mb-4">
+    Crie uma matéria nos campos seguintes 
+  </p>
+
+  {% if user.groups.all.0.name != 'monitor_administrador' %}
+    <p class="mb-4">
+      Você não tem permissão para criar uma matéria
+    </p>
+  {% else %}
+
+  <form method="POST" action="" >
+  	{% csrf_token %}
+
+  	<div class="form-group">
+      <label for="nome">Nome</label>
+    	{{ form.nome_mat }}
+
+	</div>
+	<div class="form-group">
+      <label for="descr">Descrição</label>
+      {{ form.descr_mat}}
+
+    </div>
+    <div class="form-group">
+      <label for="resp">Monitor Responsável</label>
+      {{ form.id_user }}
+
+    </div>
+
+  	<button type="submit" class="btn btn-primary">Criar Matéria</button>
+
+  </form>
+  {% endif %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

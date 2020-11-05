@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Matérias {% endblock %}
+
+{% block administrador %} active {% endblock %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Matérias</h1>
+  <p class="mb-4">
+    Veja as matérias que nossos monitores conduzem.
+    {% if user.groups.all.0.name != 'aluno' %}
+      Ou crie novas: <a href="{% url 'materia-criar' %}">Nova Matéria</a>
+    {% endif %}
+  </p>
+
+  {% if user.groups.all.0.name == 'aluno' %}
+    <p class="mb-4">
+      Você não tem permissão para ver as matérias
+    </p>
+  {% else %}
+  
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" >
+          
+          <thead>
+            <tr>
+              <th>Matéria</th>
+              <th>Descrição</th>
+              <th>Responsável</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in object_list %}
+              <tr>
+                <td>
+                  <a href="{% url 'materia-editar' obj.pk %}">{{ obj.nome_mat | truncatechars:30 }}</a>
+                </td>
+                <td>
+                  {{ obj.descr_mat | truncatechars:30 }}
+                </td>
+                <td>
+                  {{ obj.id_user.first_name | truncatechars:30 | default:"N/A" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
