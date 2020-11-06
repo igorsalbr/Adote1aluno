@@ -4,6 +4,14 @@
 __pycache__/
 local_settings.py
 uploads
-static
 .vscode
 .env
+settings.py
+website/css/
+website/img/
+website/js/
+website/scss/
+vendor/bootstrap/
+vendor/chart.js/
+vendor/datatables/
+
