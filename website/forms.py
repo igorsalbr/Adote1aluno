@@ -260,7 +260,7 @@ class ArquivosForm(forms.ModelForm):
         self.fields['file_mat'].widget.attrs.update(
             {'class': 'form-control-file', 'id': 'file'})
         self.fields['nome_arq'].widget.attrs.update(
-            {'class': 'form-control', 'placeholder': 'Insira o nome do arquivo', 'required': True})
+            {'class': 'form-control', 'placeholder': 'Insira o nome do arquivo', 'required': False})
 
 
 ArquivosFormSet = inlineformset_factory(

@@ -564,7 +564,12 @@ class MateriaisEditarView(LoginRequiredMixin, UpdateView):
             self.object = form.save()
             for arq in arquivos:
                 if arq.is_valid() and arq.has_changed():
-                    arq.save()
+                    if arq.cleaned_data['nome_arq'] == None:
+                        instance = arq.save(commit=False)
+                        instance.nome_arq = arq.cleaned_data['file_mat']
+                        instance.save()
+                    else:
+                        arq.save()
 
         return super().form_valid(form)
 
