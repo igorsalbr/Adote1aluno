@@ -168,7 +168,7 @@ class CriarEditarRespostasForm(forms.ModelForm):
 class CriarMateriaisForm(forms.ModelForm):
 
     files_mas = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'class': 'form-control-file', 'id': 'files', 'name': 'files', 'multiple': True}))
+        attrs={'class': 'form-control-file', 'id': 'files', 'name': 'files', 'multiple': True}), required=False)
 
     class Meta:
         model = Materiais
