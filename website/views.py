@@ -361,12 +361,12 @@ def forgot_password(request):
         return render(request, 'forgot-password.html', {})
 
 
-# VIEWS QUE EXIGEM AUTENTICAÇÃO
-# Home / Index
-@login_required(login_url='login')
+
 def index(request):
     return render(request, 'index.html', {})
 
+# VIEWS QUE EXIGEM AUTENTICAÇÃO
+# Home / Index
 # Duvidas: Visualizar em aberto
 
 

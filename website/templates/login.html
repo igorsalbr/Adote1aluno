@@ -26,6 +26,9 @@
                   <p class="mb-4">
                     Você já está logado
                   </p>
+                  <div class="text-center">
+                    <a class="small" href="{% url 'index' %}">Retorne para Home</a>
+                  </div>
                 {% else %}
                   <form class="user" method="POST">
                     {% csrf_token %}

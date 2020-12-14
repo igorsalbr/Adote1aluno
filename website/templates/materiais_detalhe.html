@@ -56,7 +56,7 @@
         <b>Baixar arquivos:</b>
       </p>
       {% for obj in arquivos %}
-    	  <a target="_blank" href="{{ obj.file_mat.url }}" class="btn btn-link" role="button">{{ obj.nome_arq }}</a>
+    	  <a target="_blank" href="{{ MEDIA_URL }}{{ obj.file_mat.url }}" class="btn btn-link" role="button">{{ obj.nome_arq }}</a>
           [{{ obj.file_mat.size | filesizeformat }}]
       {% empty %}
       <p>
